@@ -23,7 +23,7 @@ Read HTSeq output into DESeq2
 ####First we need to read in the files
 ```{r DESeq, eval=FALSE}
 directory <- "/home/genomics/workshop_materials/Transcriptomics/Counts/"
-sampleFiles <- list.files(path=directory,patter=".txt")
+sampleFiles <- list.files(path=directory,pattern=".txt")
 sampleFiles
 ```
 
