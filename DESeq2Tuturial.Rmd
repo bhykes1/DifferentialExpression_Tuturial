@@ -22,15 +22,14 @@ Read HTSeq output into DESeq2
 
 ####First we need to read in the files
 ```{r DESeq, eval=FALSE}
-/home/genomics/workshop_materials/
-directory <- "~/Documents/Transcriptomics/DifferentialExpression_Tuturial/Counts/"
+directory <- "/home/genomics/workshop_materials/Transcriptomics/Counts/"
 sampleFiles <- list.files(path=directory,patter=".txt")
 sampleFiles
 ```
 
 ####Now read in your metadata from the "Conditions.txt" file
 ```{r, eval = FALSE}
-sampleCondition<- read.table("~/Documents/Transcriptomics/DifferentialExpression_Tuturial/Conditions.txt",head=TRUE) #file with sample data to be compared
+sampleCondition<- read.table("/home/genomics/workshop_materials/Transcriptomics/Conditions.txt",head=TRUE) #file with sample data to be compared
 sampleCondition
 
 sampleCondition <- sampleCondition[order(sampleCondition$SampleID),] #We need to order this table by SampleID before merging with the sampleFiles
@@ -105,7 +104,7 @@ Below is a description of the column headers that will appear in the DESeq2 resu
 You MUST resist the temptation to use the p-value when evaluating DESeq2 results. The adjusted p-value (padj) accounts for multiple hypothesis testing 
 ```{r DESeq Results, eval=FALSE}
 #text file with ensembl ID's and corresponding gene names
-mmGenes = read.table("~/Documents/Transcriptomics/DifferentialExpression_Tuturial/MouseGeneTable.txt", header=TRUE, row.names = 1)
+mmGenes = read.table("/home/genomics/workshop_materials/Transcriptomics/MouseGeneTable.txt", header=TRUE, row.names = 1)
 mmGenes = as.matrix(mmGenes) #I convert the data frame to a matrix to get a downstream function, cbind, to work properly
 head(mmGenes)
 ```
@@ -137,7 +136,7 @@ resdt.dds[, Significant := padj < .1]
 resdt.dds[!is.na(Significant)]
 resdt.dds
   
-write.table(res.dds,file="~/Documents/Transcriptomics/DifferentialExpression_Tuturial/FF_vs_Cre.DESeq.out.txt",quote=F,sep="\t")
+write.table(res.dds,file="/home/genomics/workshop_materials/Transcriptomics/FF_vs_Cre.DESeq.out.txt",quote=F,sep="\t")
 ```
 
 ####make rnk table for Gene Set Enrichment Analysis
@@ -145,7 +144,7 @@ write.table(res.dds,file="~/Documents/Transcriptomics/DifferentialExpression_Tut
 RNK = data.table(Gene_Name = res.dds$Gene_Name, stat = res.dds$stat) #These are 2 columns from our deseq2 output that we need for GSEA
 RNK = subset(RNK, stat != "NA")
 head(RNK)
-write.table(RNK, "~/Documents/Transcriptomics/DifferentialExpression_Tuturial/FF_vs_Cre.DESeq.rnk",quote=F,sep="\t", row.names = F)
+write.table(RNK, "/home/genomics/workshop_materials/Transcriptomics/FF_vs_Cre.DESeq.rnk",quote=F,sep="\t", row.names = F)
   
 ```
 
@@ -192,5 +191,5 @@ for(i in 1:length(sampleFiles)){
   
 }
 head(counts)
-write.table(counts,"~/Documents/Transcriptomics/DifferentialExpression_Tuturial/CountsTable.txt",quote=F,sep="\t")
+write.table(counts,"/home/genomics/workshop_materials/Transcriptomics/CountsTable.txt",quote=F,sep="\t")
 ```
