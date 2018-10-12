@@ -4,7 +4,8 @@ author: "Barry L Hykes Jr"
 date: "10/2/2018"
 output: html_document
 ---
-
+The HTSeq counts files are located in the Counts directory. 
+Note: the counts files are from mapping to the entire Mouse Genome. Only Chromosome 1 was used for mapping for computational efficiency
 
 ###Open a browser and log into RStudio 
 ```{r Libraries, results="hide"}
@@ -21,14 +22,15 @@ Read HTSeq output into DESeq2
 
 ####First we need to read in the files
 ```{r DESeq, eval=FALSE}
-directory <- "/home/genomics/workshop_materials/Transcriptomics/Counts/"
+/home/genomics/workshop_materials/
+directory <- "~/Documents/Transcriptomics/DifferentialExpression_Tuturial/Counts/"
 sampleFiles <- list.files(path=directory,patter=".txt")
 sampleFiles
 ```
 
 ####Now read in your metadata from the "Conditions.txt" file
 ```{r, eval = FALSE}
-sampleCondition<- read.table("/home/genomics/workshop_materials/Transcriptomics/Conditions.txt",head=TRUE) #file with sample data to be compared
+sampleCondition<- read.table("~/Documents/Transcriptomics/DifferentialExpression_Tuturial/Conditions.txt",head=TRUE) #file with sample data to be compared
 sampleCondition
 
 sampleCondition <- sampleCondition[order(sampleCondition$SampleID),] #We need to order this table by SampleID before merging with the sampleFiles
@@ -63,6 +65,7 @@ ggplot(pcaData, aes(PC1, PC2, color=condition.condition))+
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
   xlim(-25,25)+
+  ggtitle("PCA Plot") +
   coord_fixed()
 ```
 
@@ -78,7 +81,7 @@ ggplot(pcaData2, aes(PC1, PC2, color=condition.condition))+
   #geom_text(mapping = aes(label = name),size=1.5)+
   geom_point(size=3) +
   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
-  ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
+  ylab(PCA with outlier removed") +
   coord_fixed()
 ```
 
@@ -102,7 +105,7 @@ Below is a description of the column headers that will appear in the DESeq2 resu
 You MUST resist the temptation to use the p-value when evaluating DESeq2 results. The adjusted p-value (padj) accounts for multiple hypothesis testing 
 ```{r DESeq Results, eval=FALSE}
 #text file with ensembl ID's and corresponding gene names
-mmGenes = read.table("/home/genomics/workshop_materials/Transcriptomics/MouseGeneTable.txt", header=TRUE, row.names = 1)
+mmGenes = read.table("~/Documents/Transcriptomics/DifferentialExpression_Tuturial/MouseGeneTable.txt", header=TRUE, row.names = 1)
 mmGenes = as.matrix(mmGenes) #I convert the data frame to a matrix to get a downstream function, cbind, to work properly
 head(mmGenes)
 ```
@@ -134,7 +137,7 @@ resdt.dds[, Significant := padj < .1]
 resdt.dds[!is.na(Significant)]
 resdt.dds
   
-write.table(res.dds,file="/home/genomics/workshop_materials/Transcriptomics/FF_vs_Cre.DESeq.out.txt",quote=F,sep="\t")
+write.table(res.dds,file="~/Documents/Transcriptomics/DifferentialExpression_Tuturial/FF_vs_Cre.DESeq.out.txt",quote=F,sep="\t")
 ```
 
 ####make rnk table for Gene Set Enrichment Analysis
@@ -142,7 +145,7 @@ write.table(res.dds,file="/home/genomics/workshop_materials/Transcriptomics/FF_v
 RNK = data.table(Gene_Name = res.dds$Gene_Name, stat = res.dds$stat) #These are 2 columns from our deseq2 output that we need for GSEA
 RNK = subset(RNK, stat != "NA")
 head(RNK)
-write.table(RNK, "/home/genomics/workshop_materials/Transcriptomics/FF_vs_Cre.DESeq.rnk",quote=F,sep="\t", row.names = F)
+write.table(RNK, "~/Documents/Transcriptomics/DifferentialExpression_Tuturial/FF_vs_Cre.DESeq.rnk",quote=F,sep="\t", row.names = F)
   
 ```
 
@@ -159,7 +162,7 @@ volcano = ggplot(
     geom_point(data = resdt.dds[(Significant)], size = 7, alpha = 0.7) + #Larger circles for the significant values
     theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust=0.5)) +
     geom_hline(yintercept = -log10(.1)) +
-    ggtitle("DESeq2 Negative Binomial Test Volcano Plot \nProximal Colon Abx vs no Abx") +
+    ggtitle("DESeq2 Negative Binomial Test Volcano Plot \n ATG5 Knockout vs Control") +
     theme(axis.title = element_text(size=12)) +
     theme(axis.text = element_text(size=12)) +
     theme(legend.text = element_text(size=12)) +
@@ -189,5 +192,5 @@ for(i in 1:length(sampleFiles)){
   
 }
 head(counts)
-write.table(counts,"/home/genomics/workshop_materials/Transcriptomics/CountsTable.txt",quote=F,sep="\t")
+write.table(counts,"~/Documents/Transcriptomics/DifferentialExpression_Tuturial/CountsTable.txt",quote=F,sep="\t")
 ```

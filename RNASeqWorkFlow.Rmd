@@ -329,7 +329,7 @@ volcano = ggplot(
     geom_point(data = resdt.dds[(Significant)], size = 7, alpha = 0.7) + #Larger circles for the significant values
     theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust=0.5)) +
     geom_hline(yintercept = -log10(.1)) +
-    ggtitle("DESeq2 Negative Binomial Test Volcano Plot \nProximal Colon Abx vs no Abx") +
+    ggtitle("DESeq2 Negative Binomial Test Volcano Plot \nProx ATG5 Knockout vs Control
     theme(axis.title = element_text(size=12)) +
     theme(axis.text = element_text(size=12)) +
     theme(legend.text = element_text(size=12)) +
