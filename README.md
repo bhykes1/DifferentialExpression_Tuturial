@@ -3,4 +3,6 @@ Within this Github repository is an RNASeq workflow using STAR, HTSeq, DESeq2, G
 
 Remember to change all directory paths to where they are located on your machine
 
+UPDATE: The zipped "Data" directory is now located within this repo
+
 Enjoy!
